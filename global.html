@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>はじめてのVue.j</title>
+<script src="https://unpkg.com/vue@2.5.17"></script>
+<script src="https://unpkg.com/vue-router@3.0.1"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.min.js"></script>
+<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet" />
+</head>
+<body>
+  <div id="app">
+    <login-require-page></login-require-page>
+    </div>
+</body>
+<script>
+  Vue .mixin({
+    data: function(){
+      return{
+        loggedInUser: null
+      }
+    },
+    created: function(){
+      var auth = this.$options.auth
+      this.loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'))
+      if (auth && !this.loggedInUser){
+        window.alert('このページはログインが必要です')
+      }
+    }
+  })
+
+  var LoginRequirePage = {
+    auth: true,
+    template: `
+      <div>
+        <p v-if="!loggedInUser">
+          このページはログインが必要です
+          </p>
+        <p v-else>
+          {{ loggedInUser.name }}さんでログインしています
+          </p>
+        </div>
+        `
+  }
+
+  new Vue({
+    el: '#app',
+    components: {
+      LoginRequirePage
+    }
+  })
+</script>
+</html>
